@@ -4,14 +4,14 @@ import { UrlDataTable } from "@/components/data-tables/url-data-table";
 import { FormInput } from "@/components/input/form-input";
 import { useEncodeUrl } from "@/hooks/useUrlEncode";
 import { Col, Row } from "antd";
-import { create } from "domain";
-import Image from "next/image";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 
 export default function Home() {
   const [url, setUrl] = useState("");
-  const encodeUrlMutation = useEncodeUrl();
+  const encodeUrlMutation = useEncodeUrl(() => {
+    setUrl("");
+  });
 
   const isValidUrl = (value: string): boolean => {
     try {
@@ -31,7 +31,6 @@ export default function Home() {
       toast.error("Invalid Url:");
       return;
     }
-
     encodeUrlMutation.mutate({ url });
   };
   return (
@@ -43,6 +42,7 @@ export default function Home() {
               <p className="text-[#39393A] text-2xl text-center">Encode Url</p>
               <form onSubmit={handleEncodeUrl}>
                 <FormInput
+                  value={url}
                   label="Enter Url"
                   placeholder="https://example.com or http://example.com"
                   handleChangeText={setUrl}
@@ -60,8 +60,7 @@ export default function Home() {
         </Row>
       </div>
       <div className="my-4">
-
-      <UrlDataTable />
+        <UrlDataTable />
       </div>
     </div>
   );
