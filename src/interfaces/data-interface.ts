@@ -16,3 +16,12 @@ export interface UrlRecord {
     updatedAt: string,
     shortCode: string
 }
+
+
+export interface DecodeUrlResponse {
+    url: string
+}
+
+export interface DecodeUrlPayload {
+    url: string
+}

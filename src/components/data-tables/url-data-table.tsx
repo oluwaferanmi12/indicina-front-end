@@ -8,10 +8,22 @@ import { toast } from "sonner";
 import { dateExplicit } from "@/utils/date-formats";
 import React, { useEffect, useMemo, useState } from "react";
 import debounce from "lodash/debounce";
+import { Button } from "@/components/button/form-button";
+import { ModalWrapper } from "@/components/modal/modal-wrapper";
+import { FormInput } from "@/components/input/form-input";
+import { isValidUrl } from "@/utils/isValidUrl";
+import { useDecodeUrl } from "@/hooks/useDecodeUrl";
+import Image from "next/image";
 
 export const UrlDataTable = () => {
   const { data = [], isLoading } = useFetchUrls();
   const [filteredData, setFilteredData] = useState<UrlRecord[]>([]);
+  const [showDecodeModal, setShowDecodeModal] = useState(false);
+  const [decodeUrl, setDecodeUrl] = useState("");
+
+  const decodeUrlMutation = useDecodeUrl(() => {
+    setDecodeUrl("");
+  });
 
   useEffect(() => {
     setFilteredData(data);
@@ -103,17 +115,78 @@ export const UrlDataTable = () => {
     }
   }, 300);
 
+  const handleDecodeUrl = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!decodeUrl) {
+      toast.error("Url is required");
+    } else if (!isValidUrl(decodeUrl)) {
+      toast.error("Invalid Url:");
+      return;
+    }
+    decodeUrlMutation.mutate({ url: decodeUrl });
+  };
+
   return (
     <div className="w-full overflow-x-auto px-4 py-6">
+      <ModalWrapper
+        open={showDecodeModal}
+        headerText="Decode Url"
+        onCancel={() => {
+          setShowDecodeModal(false);
+        }}
+      >
+        <form onSubmit={handleDecodeUrl}>
+          <FormInput
+            handleChangeText={setDecodeUrl}
+            label="Enter Short Url"
+            placeholder="https://short.est/ty2Wzd"
+            value={decodeUrl}
+          />
+          <div className="flex mt-2 justify-end">
+            <Button
+              loading={decodeUrlMutation.isPending}
+              text="Decode"
+              type="submit"
+              clickAction={() => {}}
+            />
+          </div>
+        </form>
+        {decodeUrlMutation.data?.url && (
+          <div className="text-black flex items-center gap-2 bg-[#DAF0E3] my-3 w-full p-4 rounded-lg">
+            <p>{decodeUrlMutation.data?.url}</p>
+            <span
+              onClick={() => {
+                try {
+                  navigator.clipboard.writeText(decodeUrlMutation.data.url);
+                  toast.success("Copied");
+                } catch (e) {
+                  toast.error("Unable to copy url");
+                }
+              }}
+              className="cursor-pointer"
+            >
+              <Image src={copyIcon} alt="" />
+            </span>
+          </div>
+        )}
+      </ModalWrapper>
       {isLoading ? (
         <div className="flex justify-center items-center h-48 text-gray-600 text-lg">
           Loading...
         </div>
       ) : (
         <div className="min-w-[900px]">
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-end gap-2">
+            <Button
+              loading={false}
+              text="Decode a url"
+              type="button"
+              clickAction={() => {
+                setShowDecodeModal(true);
+              }}
+            />
             <input
-              className="py-1 mb-2 px-3 bg-[#f5f5f5] rounded-lg"
+              className="py-2 mb-2 px-3 bg-[#f5f5f5] rounded-lg"
               onChange={(e) => {
                 if (e.target.value.length > 3) {
                   handleSearch(e);

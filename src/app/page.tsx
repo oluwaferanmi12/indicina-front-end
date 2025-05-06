@@ -3,6 +3,7 @@ import { Button } from "@/components/button/form-button";
 import { UrlDataTable } from "@/components/data-tables/url-data-table";
 import { FormInput } from "@/components/input/form-input";
 import { useEncodeUrl } from "@/hooks/useUrlEncode";
+import { isValidUrl } from "@/utils/isValidUrl";
 import { Col, Row } from "antd";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
@@ -13,15 +14,7 @@ export default function Home() {
     setUrl("");
   });
 
-  const isValidUrl = (value: string): boolean => {
-    try {
-      new URL(value);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  };
-
+  
   const handleEncodeUrl = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!url) {
@@ -47,7 +40,7 @@ export default function Home() {
                   placeholder="https://example.com or http://example.com"
                   handleChangeText={setUrl}
                 />
-                <div className="flex justify-end">
+                <div className="flex mt-2 justify-end">
                   <Button
                     type="submit"
                     text="Submit"
