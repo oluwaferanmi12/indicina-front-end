@@ -4,6 +4,7 @@ import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Toaster } from "sonner";
 import QueryProvider from "@/react-query/query-provider";
+import { Navbar } from "@/components/nav/navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AntdRegistry>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <Navbar />
+            {children}
+            </QueryProvider>
           <Toaster richColors position="bottom-right" />
         </AntdRegistry>
       </body>
