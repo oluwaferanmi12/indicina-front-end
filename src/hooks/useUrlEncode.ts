@@ -14,7 +14,6 @@ export const useEncodeUrl = (onSuccessCallback: ()=> void) => {
             onSuccessCallback();
         },
         onError: (error) => {
-            toast.error("Failed to encode URL. Please try again.");
             console.error(error);
         }
     });

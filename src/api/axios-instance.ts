@@ -16,6 +16,13 @@ axiosInstance.interceptors.response.use(
             // Optionally redirect to login or refresh token
             // ÷
         }
+        if (error.response.data.message) {
+            toast.error(error.response.data.message);
+
+        }
+        else {
+            toast.error("Oops, Unexpected error")
+        }
         return Promise.reject(error);
     }
 );

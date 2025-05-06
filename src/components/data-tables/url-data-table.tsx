@@ -157,7 +157,8 @@ export const UrlDataTable = () => {
             <span
               onClick={() => {
                 try {
-                  navigator.clipboard.writeText(decodeUrlMutation.data.url);
+                  navigator.clipboard.writeText(decodeUrlMutation.data.url
+                  );
                   toast.success("Copied");
                 } catch (e) {
                   toast.error("Unable to copy url");

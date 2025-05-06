@@ -12,7 +12,6 @@ export const useDecodeUrl = (onSuccessCallback?: () => void) => {
             if (onSuccessCallback) onSuccessCallback();
         },
         onError: (error) => {
-            toast.error("Failed to decode URL. Please try again.");
             console.error(error);
         },
     });
