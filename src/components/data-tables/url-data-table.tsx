@@ -6,10 +6,16 @@ import copyIcon from "@/assets/svgs/copyIcon.svg";
 import moment from "moment";
 import { toast } from "sonner";
 import { dateExplicit } from "@/utils/date-formats";
+import React, { useEffect, useMemo, useState } from "react";
+import debounce from "lodash/debounce";
 
 export const UrlDataTable = () => {
   const { data = [], isLoading } = useFetchUrls();
+  const [filteredData, setFilteredData] = useState<UrlRecord[]>([]);
 
+  useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
   const columns = [
     {
       header: "Original URL",
@@ -81,6 +87,22 @@ export const UrlDataTable = () => {
     },
   ];
 
+  const handleSearch = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value) {
+      const searchVal = e.target.value.toLowerCase();
+      const result = data.filter((item) => {
+        return (
+          item.originalUrl.toLowerCase().includes(searchVal) ||
+          item.short_code.toLowerCase().includes(searchVal) ||
+          item.short_url.toLowerCase().includes(searchVal)
+        );
+      });
+      setFilteredData([...result]);
+    } else {
+      setFilteredData([...data]);
+    }
+  }, 300);
+
   return (
     <div className="w-full overflow-x-auto px-4 py-6">
       {isLoading ? (
@@ -89,8 +111,21 @@ export const UrlDataTable = () => {
         </div>
       ) : (
         <div className="min-w-[900px]">
+          <div className="flex items-center justify-end">
+            <input
+              className="py-1 mb-2 px-3 bg-[#f5f5f5] rounded-lg"
+              onChange={(e) => {
+                if (e.target.value.length > 3) {
+                  handleSearch(e);
+                } else {
+                  setFilteredData([...data]);
+                }
+              }}
+              placeholder="search"
+            />
+          </div>
           <DataTable
-            value={data}
+            value={filteredData}
             tableStyle={{ minWidth: "100%" }}
             columnResizeMode="fit"
             scrollable
