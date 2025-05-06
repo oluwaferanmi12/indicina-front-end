@@ -30,7 +30,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center justify-center">
       <div className=" flex justify-center items-center w-full">
         <Row justify={"center"} className="w-full" align={"middle"}>
-          <Col xs={8}>
+          <Col xs={22} lg={8}>
             <div className="bg-[#E6E6E6] rounded-lg p-4 w-full">
               <p className="text-[#39393A] text-2xl text-center">Encode Url</p>
               <form onSubmit={handleEncodeUrl}>

@@ -157,8 +157,7 @@ export const UrlDataTable = () => {
             <span
               onClick={() => {
                 try {
-                  navigator.clipboard.writeText(decodeUrlMutation.data.url
-                  );
+                  navigator.clipboard.writeText(decodeUrlMutation.data.url);
                   toast.success("Copied");
                 } catch (e) {
                   toast.error("Unable to copy url");
@@ -202,6 +201,7 @@ export const UrlDataTable = () => {
             value={filteredData}
             tableStyle={{ minWidth: "100%" }}
             columnResizeMode="fit"
+            responsiveLayout="scroll"
             scrollable
             scrollHeight="400px"
             className="shadow-md rounded-lg overflow-hidden border border-gray-200"
