@@ -1,6 +1,7 @@
 "use client"
 import { Button } from "@/components/button/form-button";
 import { FormInput } from "@/components/input/form-input";
+import { useEncodeUrl } from "@/hooks/useUrlEncode";
 import { Col, Row } from "antd";
 import { create } from "domain";
 import Image from "next/image";
@@ -9,7 +10,7 @@ import { toast } from "sonner";
 
 export default function Home() {
   const [url, setUrl] = useState("")
-  const [createUrlLoading , setCreateUrlLoading] = useState(false);
+  const encodeUrlMutation = useEncodeUrl()
 
  const isValidUrl = (value: string): boolean => {
    try {
@@ -23,17 +24,15 @@ export default function Home() {
 
   const handleEncodeUrl = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setCreateUrlLoading(true)
     if(!url){
       toast.error("Url is required")
-      setCreateUrlLoading(false)
       return;
     }else if(!isValidUrl(url)){
       toast.error("Invalid Url:")
-      setCreateUrlLoading(false);
       return;
     }
 
+    encodeUrlMutation.mutate({url})
 
   }
   return (
@@ -52,7 +51,7 @@ export default function Home() {
                 <Button
                   type="submit"
                   text="Submit"
-                  loading={createUrlLoading}
+                  loading={encodeUrlMutation.isPending}
                 />
               </div>
             </form>
