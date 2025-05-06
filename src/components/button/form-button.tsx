@@ -15,7 +15,7 @@ export const Button = ({
     <button
       disabled={loading}
       onClick={clickAction}
-      className="py-2 px-4 rounded-lg my-2 flex text-sm justify-center bg-black"
+      className="py-2 px-4 rounded-lg my-2 flex text-sm text-white justify-center bg-black"
       type={type}
     >
       {loading ? <ButtonSpinner /> : text}

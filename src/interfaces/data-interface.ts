@@ -6,3 +6,13 @@ export interface EncodeUrlResponse {
     shortUrl: string;
     id: string;
 }
+
+export interface UrlRecord {
+    short_code: string,
+    originalUrl: string,
+    visits: number,
+    createdAt: string,
+    short_url: string,
+    updatedAt: string,
+    shortCode: string
+}
